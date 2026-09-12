@@ -53,9 +53,13 @@ The primary POS transaction will follow this sequence:
    - The POS presents the products available within that category.
 
 5. **Product Customization**
+
    - The barista progresses through a nested customization workflow based on the selected product.
    - Available customization options may include size, temperature, milk type, flavors, toppings, add-ons, and other product-specific options.
    - The system should only present customization options that are applicable to the selected product.
+   - Products may have different available sizes. Products with multiple available sizes must require the barista to select one size.
+   - Products configured with only one available size should automatically use that size without requiring a size selection.
+   - Products that do not have a size should not display a size selection option.
 
 6. **Order Finalization**
    - The barista reviews the completed order.
@@ -98,6 +102,7 @@ Managers will have elevated permissions within the POS system. The MVP will incl
 * Disable or re-enable individual products.
 * Disable or re-enable individual customization options.
 * Control which customization options are available for a particular product.
+* Control which sizes are available for a particular product.
 * Adjust inventory quantities.
 * View sales reports.
 
@@ -161,6 +166,9 @@ Sales by employee and sales by payment method are not considered priorities for 
 - The system must allow the barista to select a product and customize it.
 - The system must only display customization options that apply to the selected product.
 - The system must prevent unavailable products and customizations from being added to new orders.
+- The system must only display sizes that are available for the selected product.
+- The system must require a size selection when a product has multiple available sizes.
+- The system must automatically assign the size when a product has only one available size and should not require a size selection from the barista.
 - The system must calculate the order subtotal, applicable taxes, discounts, and final total.
 - The system must allow the barista to finalize an order and record payment.
 
@@ -212,6 +220,12 @@ The system should store:
 - Product category
 - Product price
 - Active/inactive status
+- Size ID
+- Size name
+- Display order
+- Active/inactive status
+- Products that allow the size
+- Size-specific price adjustment
 
 ### Categories
 
