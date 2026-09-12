@@ -37,6 +37,16 @@ Represents the categories used to organize products in the POS, such as espresso
 
 Represents a drink or other item that can be sold through the POS. Products will belong to a category and have a price and availability status.
 
+### Size
+
+Represents the sizes that may be available for products, such as Small, Medium, or Large.
+
+### Product Size
+
+Represents the relationship between a product and the sizes that are available for that product.
+
+This allows differenct products to have different available sizes and size-specific price adjustments.
+
 ### Customization Group
 
 Represents a category of customization choices that can be applied to a product, such as Milk, Ice, Temperature, Foam, Syrups, or Add-ons.
@@ -96,6 +106,16 @@ A category can contain many products, while each product belongs to one category
 **Relationship:**
 
 `Category → Product`
+
+### Product and Size
+
+A product can have multiple available sizes, while a size can be available for multiple products.
+
+**Relationship:**
+
+`Product ↔ Size`
+
+This many-to-many relationship is implemented through the Product Size table. The Product Size table also stores the price adjustment and availability status for each product-size combination.
 
 ### Product and Customization Option
 
@@ -239,6 +259,34 @@ The initial categories will include:
 Each product will belong to one category, while a category can contain multiple products.
 
 Categories will not have an availability status in the MVP. Product availability will be managed at the individual product level rather than disabling entire categories.
+
+### Size
+
+The Size table will store the standard sizes that may be offered by products.
+
+| Field | Purpose |
+|---|---|
+| SizeID | Unique identifier for the size |
+| SizeName | Name displayed for the size |
+| DisplayOrder | Determines the order in which sizes are displayed |
+| IsActive | Indicates whether the size is currently available |
+
+The Size table allows the coffee shop to maintain a consistent set of sizes that can be assigned to individual products.
+
+### Product Size
+
+The Product Size table will define which sizes are available for each product.
+
+| Field | Purpose |
+|---|---|
+| ProductID | Identifies the product |
+| SizeID | Identifies the available size |
+| PriceAdjustment | Additional amount added to or subtracted from the product price for this size |
+| IsActive | Indicates whether this size is currently available for the specific product |
+
+A product can have multiple available sizes, while the same size can be available for multiple products.
+
+If a product has multiple active sizes, the POS will require the barista to select a size. If a product has only one active size, the POS can automatically assign that size without requiring a selection. Products with no associated sizes will not display a size selection.
 
 ### Product Customization
 
@@ -513,7 +561,7 @@ Product records will be retained even when a product is no longer active so that
 
 The Price field represents the product's current selling price. The price associated with an order item will be preserved separately when an order is created so that changes to a product's current price do not alter historical orders.
 
-Products may have customization groups when applicable. Customizations will not be required for every product. For example, beverages may have customization groups for size, milk, ice, foam, or syrups, while merchandise items will not have customization options.
+Products may have customization groups when applicable. Customizations will not be required for every product. For example, beverages may have customization groups for milk, ice, foam, or syrups, while merchandise items will not have customization options.
 
 ### Customization Group
 

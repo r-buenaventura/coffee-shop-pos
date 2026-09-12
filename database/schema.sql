@@ -50,6 +50,25 @@ CREATE TABLE Product (
     FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)
 );
 
+-- Size
+CREATE TABLE Size (
+    SizeID INT PRIMARY KEY AUTO_INCREMENT,
+    SizeName VARCHAR(50) NOT NULL UNIQUE,
+    DisplayOrder INT NOT NULL DEFAULT 0,
+    IsActive BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+-- Product Size 
+CREATE TABLE ProductSize (
+    ProductID INT NOT NULL,
+    SizeID INT NOT NULL,
+    PriceAdjustment DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    IsActive BOOLEAN NOT NULL DEFAULT TRUE,
+    PRIMARY KEY (ProductID, SizeID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+    FOREIGN KEY (SizeID) REFERENCES Size(SizeID)
+);
+
 -- Product Customization
 CREATE TABLE ProductCustomization (
     ProductCustomizationID INT PRIMARY KEY AUTO_INCREMENT,
