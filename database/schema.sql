@@ -97,11 +97,13 @@ CREATE TABLE OrderItem (
     OrderItemID INT PRIMARY KEY AUTO_INCREMENT,
     OrderID INT NOT NULL,
     ProductID INT NOT NULL,
+    SizeID INT NULL,
     Quantity INT NOT NULL DEFAULT 1,
     UnitPrice DECIMAL(10, 2) NOT NULL,
     Subtotal DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+    FOREIGN KEY (SizeID) REFERENCES Size(SizeID)
 );
 
 -- Order Item Customization

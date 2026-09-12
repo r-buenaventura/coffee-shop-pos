@@ -363,6 +363,7 @@ Each Order Item represents one product purchased as part of a customer transacti
 | OrderItemID | Unique identifier for the order item |
 | OrderID | Identifies the order containing the item |
 | ProductID | Identifies the product that was purchased |
+| SizeID | Identifies the size selected or automatically assigned for the product, when applicable |
 | Quantity | Number of units of the product purchased |
 | UnitPrice | Product price at the time the order was created |
 | Subtotal | Total price for this item before tax |
@@ -370,6 +371,8 @@ Each Order Item represents one product purchased as part of a customer transacti
 Each Order Item will belong to one Order, while an Order can contain multiple Order Items.
 
 Each Order Item will reference one Product, while a Product can appear in many Order Items over time.
+
+The SizeID field will be optional because some products may have no available sizes. If a product has multiple available sizes, the selected size will be stored. If a product has only one available size, that size will be automatically assigned and stored.
 
 The UnitPrice field will preserve the product's price at the time it was added to the order. This is necessary because the current price stored in the Product table may change in the future.
 
@@ -822,6 +825,12 @@ This prevents future changes to customization pricing from altering historical o
 
 For example, if Oat Milk costs an additional $0.80 when an order is placed and the price is later changed to $1.00, previously completed orders will continue to show the original $0.80 adjustment.
 
+### Historical Size Information
+
+The Order Item table will preserve the size selected or automatically assigned to the product at the time of the order. Changes to product size availability will affect new orders only and will not change the size information stored in completed orders.
+
+The UnitPrice field will preserve the price charged for the order item at the time the order was created. This ensures that changes to product or size pricing will not alter historical order totals.
+
 ### Deactivated Products and Customizations
 
 Products and customization options will not be physically deleted when they become unavailable.
@@ -853,8 +862,6 @@ The MVP will avoid physically deleting products, customization options, and comp
 Records that are no longer active will generally be deactivated rather than deleted.
 
 This approach preserves referential integrity and ensures that historical sales information remains accurate over time.
-
-## 9. Design Decisions
 
 ## 9. Design Decisions
 
