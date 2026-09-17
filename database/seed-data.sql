@@ -212,3 +212,68 @@ VALUES
         -- Pour Over
             ((SELECT ProductID FROM Product WHERE ProductName = 'Pour Over'),
             (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00);
+
+    -- Tea
+
+        -- Hot Tea
+        INSERT INTO ProductSize (ProductID, SizeID, PriceAdjustment)
+        VALUES
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Tea'),
+            (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Tea'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Tea'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.00),
+
+        -- Iced Tea
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Tea'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Tea'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.00),
+
+    -- Hot Beverages
+
+        INSERT INTO ProductSize (ProductID, SizeID, PriceAdjustment)
+        VALUES
+        -- Hot Chai Latte
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chai Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chai Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chai Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00),
+
+            -- Hot Chocolate
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chocolate'),
+            (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chocolate'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chocolate'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00),
+
+            -- Steamer
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Steamer'),
+            (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Steamer'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Steamer'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00);
+    -- Cold Beverages
+
+        -- Iced Chai Latte
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Chai Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Chai Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50);
+
+        -- Italian Soda
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Italian Soda'),
+        (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Italian Soda'),
+        (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50),
+
+        -- Lemonade
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Lemonade'),
+        (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Lemonade'),
+        (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50);
