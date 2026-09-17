@@ -25,3 +25,28 @@ VALUES
     ('12oz', 2),
     ('16oz', 3),
     ('20oz', 4);
+
+-- Products
+
+-- Hot Espresso Beverages
+INSERT INTO Product (ProductName, CategoryID, Price)
+VALUES
+    ('Latte',
+        (SELECT CategoryID FROM Category
+        WHERE CategoryName = 'Hot Espresso Beverages'),
+        5.50),
+
+    ('Cappuccino',
+        (SELECT CategoryID FROM Category
+        WHERE CategoryName = 'Hot Espresso Beverages'),
+        5.25),
+
+    ('Americano',
+        (SELECT CategoryID FROM Category
+        WHERE CategoryName = 'Hot Espresso Beverages'),
+        4.25),
+
+    ('Mocha',
+        (SELECT CategoryID FROM Category
+        WHERE CategoryName = 'Hot Espresso Beverages'),
+        6.00),
