@@ -5,7 +5,6 @@
 USE coffee_shop_pos;
 
 -- Categories
-
 INSERT INTO Category (CategoryName) 
 VALUES
     ('Hot Espresso Beverages'),
@@ -23,30 +22,193 @@ INSERT INTO Size (SizeName, DisplayOrder)
 VALUES
     ('8oz', 1),
     ('12oz', 2),
-    ('16oz', 3),
-    ('20oz', 4);
+    ('16oz', 3);
 
 -- Products
 
--- Hot Espresso Beverages
-INSERT INTO Product (ProductName, CategoryID, Price)
-VALUES
-    ('Latte',
-        (SELECT CategoryID FROM Category
-        WHERE CategoryName = 'Hot Espresso Beverages'),
-        5.50),
+    -- Hot Espresso Beverages
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Latte',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Espresso Beverages'),
+            5.50),
 
-    ('Cappuccino',
-        (SELECT CategoryID FROM Category
-        WHERE CategoryName = 'Hot Espresso Beverages'),
-        5.25),
+        ('Cappuccino',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Espresso Beverages'),
+            5.25),
 
-    ('Americano',
-        (SELECT CategoryID FROM Category
-        WHERE CategoryName = 'Hot Espresso Beverages'),
-        4.25),
+        ('Americano',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Espresso Beverages'),
+            4.25),
 
-    ('Mocha',
-        (SELECT CategoryID FROM Category
-        WHERE CategoryName = 'Hot Espresso Beverages'),
-        6.00),
+        ('Mocha',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Espresso Beverages'),
+            6.00);
+
+    -- Cold Espresso Beverages
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Iced Latte',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Cold Espresso Beverages'), 5.75),
+        ('Iced Americano',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Cold Espresso Beverages'), 4.50),
+        ('Iced Mocha',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Cold Espresso Beverages'), 6.25);
+
+    -- Brewed Coffee
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Drip Coffee',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Brewed Coffee'), 3.50),
+        ('Pour Over',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Brewed Coffee'), 5.50);
+
+    -- Tea
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Hot Tea',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Tea'), 4.50),
+        ('Iced Tea',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Tea'), 4.50);
+
+    -- Hot Beverages
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Chai Latte',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Beverages'), 5.50),
+        ('Hot Chocolate',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Beverages'), 4.50),
+        ('Steamer',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Beverages'), 3.00);
+
+    -- Cold Beverages
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Chai Latte',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Cold Beverages'), 5.50),
+        ('Italian Soda',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Cold Beverages'), 4.50),
+        ('Lemonade',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Cold Beverages'), 5.00);
+
+    -- Hot Breakfast
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Breakfast Sandwich',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Hot Breakfast'), 7.50);
+
+    -- Pastries
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Croissant',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Pastries'), 4.50),
+        ('Muffin',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Pastries'), 4.25);
+
+    -- Sweet Treats
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Cookie',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Sweet Treats'), 3.50),
+        ('Brownie',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Sweet Treats'), 4.25);
+
+    -- Merchandise
+    INSERT INTO Product (ProductName, CategoryID, Price)
+    VALUES
+        ('Travel Mug',
+            (SELECT CategoryID FROM Category
+            WHERE CategoryName = 'Merchandise'), 18.00);
+
+-- Product Sizes
+
+    -- Hot Espresso Beverages
+    INSERT INTO ProductSize (ProductID, SizeID, PriceAdjustment)
+    VALUES
+        -- Latte
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Latte'),
+        (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Latte'),
+        (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Latte'),
+        (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00),
+        
+        -- Cappuccino
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Cappuccino'),
+        (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+        
+        -- Americano
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Americano'),
+        (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Americano'),
+        (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Americano'),
+        (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00),
+
+        -- Mocha
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Mocha'),
+        (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Mocha'),
+        (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Mocha'),
+        (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00);
+
+    -- Cold Espresso Beverages
+
+        -- Iced Latte
+        INSERT INTO ProductSize (ProductID, SizeID, PriceAdjustment)
+        VALUES
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Latte'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50),
+
+            -- Iced Americano
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Americano'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Americano'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50),
+
+            -- Iced Mocha
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Mocha'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Mocha'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50);
+
+    -- Brewed Coffee
+
+        -- Drip Coffee
+        INSERT INTO ProductSize (ProductID, SizeID, PriceAdjustment)
+        VALUES
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Drip Coffee'),
+            (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Drip Coffee'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Drip Coffee'),
+            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00),
+
+        -- Pour Over
+            ((SELECT ProductID FROM Product WHERE ProductName = 'Pour Over'),
+            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00);
