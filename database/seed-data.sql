@@ -291,6 +291,22 @@ VALUES
     VALUES
         ('Milk', 'Single', 0, 1, 1);
 
+    -- Milk Addition
+        INSERT INTO CustomizationGroup (
+            GroupName,
+            SelectionType,
+            MinimumSelections,
+            MaximumSelections,
+            DisplayOrder
+        )
+        VALUES (
+            'Milk Addition',
+            'Single',
+            0,
+            1,
+            2
+        );
+
 -- Customization Options
 
 
@@ -324,6 +340,58 @@ VALUES
             FROM CustomizationGroup
             WHERE GroupName = 'Milk'), 'Soy');
 
+        -- Milk Addition Options
+            INSERT INTO CustomizationOption (
+                CustomizationGroupID,
+                OptionName
+            )
+            VALUES
+                ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Milk Addition'), 'Room'),
+
+                ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Milk Addition'), 'Splash'),
+
+                ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Milk Addition'), 'Add Milk');
+
+    -- Customization Dependencies
+
+        -- Milk Addition Dependencies
+            INSERT INTO CustomizationDependency (
+            TriggerOptionID,
+            DependentGroupID
+            )
+            VALUES
+                    ((SELECT CustomizationOptionID
+                    FROM CustomizationOption
+                    WHERE OptionName = 'Splash'
+                    AND CustomizationGroupID = (
+                        SELECT CustomizationGroupID
+                        FROM CustomizationGroup
+                        WHERE GroupName = 'Milk Addition'
+                    )),
+                    (SELECT CustomizationGroupID
+                    FROM CustomizationGroup
+                    WHERE GroupName = 'Milk')
+                    ),
+                    (
+                    (SELECT CustomizationOptionID
+                    FROM CustomizationOption
+                    WHERE OptionName = 'Add Milk'
+                    AND CustomizationGroupID = (
+                        SELECT CustomizationGroupID
+                        FROM CustomizationGroup
+                        WHERE GroupName = 'Milk Addition'
+                    )),
+                    (SELECT CustomizationGroupID
+                    FROM CustomizationGroup
+                    WHERE GroupName = 'Milk')
+                    );
+
 -- Product Customizations
 
     -- Milk Customizations
@@ -356,3 +424,51 @@ VALUES
                 'Steamer'
             )
             AND cg.GroupName = 'Milk';
+
+    -- Milk Addition Customizations
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+        )
+        SELECT
+            p.ProductID,
+            co.CustomizationOptionID,
+            CASE
+                WHEN co.OptionName = 'Add Milk'
+                    THEN 0.50
+                ELSE 0.00
+            END
+        FROM Product p
+        CROSS JOIN CustomizationOption co
+        JOIN CustomizationGroup cg
+            ON co.CustomizationGroupID = cg.CustomizationGroupID
+        WHERE p.ProductName IN (
+            'Americano',
+            'Iced Americano',
+            'Hot Tea',
+            'Iced Tea'
+        )
+        AND cg.GroupName = 'Milk Addition';
+
+    -- Milk Options for Conditional Milk Additions
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+        )
+        SELECT
+            p.ProductID,
+            co.CustomizationOptionID,
+            0.00
+        FROM Product p
+        CROSS JOIN CustomizationOption co
+        JOIN CustomizationGroup cg
+            ON co.CustomizationGroupID = cg.CustomizationGroupID
+        WHERE p.ProductName IN (
+            'Americano',
+            'Iced Americano',
+            'Hot Tea',
+            'Iced Tea'
+        )
+        AND cg.GroupName = 'Milk';

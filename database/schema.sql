@@ -40,6 +40,21 @@ CREATE TABLE CustomizationOption (
     IsActive BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+-- Customization Dependency
+CREATE TABLE CustomizationDependency (
+    CustomizationDependencyID INT AUTO_INCREMENT PRIMARY KEY,
+    TriggerOptionID INT NOT NULL,
+    DependentGroupID INT NOT NULL,
+
+    FOREIGN KEY (TriggerOptionID)
+        REFERENCES CustomizationOption(CustomizationOptionID),
+
+    FOREIGN KEY (DependentGroupID)
+        REFERENCES CustomizationGroup(CustomizationGroupID),
+
+    UNIQUE (TriggerOptionID, DependentGroupID)
+);
+
 -- Product
 CREATE TABLE Product (
     ProductID INT PRIMARY KEY AUTO_INCREMENT,

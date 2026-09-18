@@ -57,6 +57,12 @@ Each customization group will define rules for how many options can be selected.
 
 Represents an individual choice within a customization group, such as Oat Milk, Light Ice, Vanilla Syrup, or Extra Foam.
 
+### Customization Dependency
+
+Represents a conditional relationship between a customization option and another customization group.
+
+When a trigger option is selected, the dependent customization group can be displayed. For example, selecting Splash or Add Milk can display a Milk Type group, while selecting Room requires no additional selection.
+
 ### Product Customization
 
 Represents the relationship between a product and the customization options that are available for that product.
@@ -137,6 +143,16 @@ A customization group can contain multiple customization options, while each cus
 
 For example, the "Ice" customization group could contain Regular, Light, and Extra Ice options.
 
+### Customization Option and Customization Group Dependency
+
+A customization option can trigger an additional customization group when further information is required.
+
+**Relationship:**
+
+`Customization Option → Customization Dependency → Customization Group`
+
+For example, selecting Splash or Add Milk can trigger a Milk Type group. Selecting Room does not trigger another group because no additional information is required.
+
 ### Order and Order Item
 
 An order can contain multiple order items, while each order item belongs to one order.
@@ -203,6 +219,10 @@ Product
 Order Item
 → Order Item Customization
 → Customization Option
+→ Customization Group
+
+Customization Option
+→ Customization Dependency
 → Customization Group
 
 Order
@@ -320,6 +340,22 @@ For example:
 The Product Customization table will also allow the POS to determine which customization options should be displayed when a specific product is selected.
 
 A product does not need to have any customization options. For example, a merchandise product can simply have no associated Product Customization records.
+
+### Customization Dependency
+
+The Customization Dependency table will define conditional relationships between customization options and additional customization groups.
+
+| Field | Purpose |
+|---|---|
+| CustomizationDependencyID | Unique identifier for the customization dependency |
+| TriggerOptionID | Identifies the customization option that triggers the dependency |
+| DependentGroupID | Identifies the customization group that should be displayed next |
+
+When a trigger option is selected, the POS can use this table to determine whether another customization group should be displayed.
+
+For example, selecting Splash or Add Milk can trigger the Milk Type group. Selecting Room does not require a dependency because no additional milk selection is needed.
+
+The combination of TriggerOptionID and DependentGroupID will be unique to prevent duplicate dependency relationships.
 
 ### Order
 
@@ -680,8 +716,6 @@ The database will store the available groups and options, while the frontend wil
 
 Customization options will not have a fixed price associated with them. Price adjustments will instead be determined by the relationship between a product and its available customization options. This allows the same customization option to have different prices depending on the product.
 
-
-## 6. Product Availability
 
 ## 6. Product Availability
 
