@@ -235,7 +235,7 @@ VALUES
 
         INSERT INTO ProductSize (ProductID, SizeID, PriceAdjustment)
         VALUES
-        -- Hot Chai Latte
+            -- Hot Chai Latte
             ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chai Latte'),
             (SELECT SizeID FROM Size WHERE SizeName = '8 oz'), 0.00),
             ((SELECT ProductID FROM Product WHERE ProductName = 'Hot Chai Latte'),
@@ -261,10 +261,10 @@ VALUES
     -- Cold Beverages
 
         -- Iced Chai Latte
-            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Chai Latte'),
-            (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
-            ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Chai Latte'),
-            (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50);
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Chai Latte'),
+        (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
+        ((SELECT ProductID FROM Product WHERE ProductName = 'Iced Chai Latte'),
+        (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50);
 
         -- Italian Soda
         ((SELECT ProductID FROM Product WHERE ProductName = 'Italian Soda'),
@@ -277,3 +277,82 @@ VALUES
         (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.00),
         ((SELECT ProductID FROM Product WHERE ProductName = 'Lemonade'),
         (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 0.50);
+
+
+-- Customization Groups
+
+    INSERT INTO CustomizationGroup (
+        GroupName,
+        SelectionType,
+        MinimumSelections,
+        MaximumSelections,
+        DisplayOrder
+    )
+    VALUES
+        ('Milk', 'Single', 0, 1, 1);
+
+-- Customization Options
+
+
+    -- Milk
+        INSERT INTO CustomizationOption (
+            CustomizationGroupID,
+            OptionName
+        )
+        VALUES
+            ((SELECT CustomizationGroupID
+            FROM CustomizationGroup
+            WHERE GroupName = 'Milk'), 'Whole'),
+
+            ((SELECT CustomizationGroupID
+            FROM CustomizationGroup
+            WHERE GroupName = 'Milk'), 'NonFat'),
+
+            ((SELECT CustomizationGroupID
+            FROM CustomizationGroup
+            WHERE GroupName = 'Milk'), 'Half & Half'),
+
+            ((SELECT CustomizationGroupID
+            FROM CustomizationGroup
+            WHERE GroupName = 'Milk'), 'Oat'),
+
+            ((SELECT CustomizationGroupID
+            FROM CustomizationGroup
+            WHERE GroupName = 'Milk'), 'Almond'),
+
+            ((SELECT CustomizationGroupID
+            FROM CustomizationGroup
+            WHERE GroupName = 'Milk'), 'Soy');
+
+-- Product Customizations
+
+    -- Milk Customizations
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+            )
+            SELECT
+                p.ProductID,
+                co.CustomizationOptionID,
+                CASE
+                    WHEN co.OptionName IN ('Half & Half', 'Oat', 'Almond', 'Soy')
+                        THEN 1.00
+                    ELSE 0.00
+                END
+            FROM Product p
+            CROSS JOIN CustomizationOption co
+            JOIN CustomizationGroup cg
+                ON co.CustomizationGroupID = cg.CustomizationGroupID
+            WHERE p.ProductName IN (
+                'Latte',
+                'Cappuccino',
+                'Mocha',
+                'Iced Latte',
+                'Iced Mocha',
+                'Hot Chai Latte',
+                'Iced Chai Latte',
+                'Hot Chocolate',
+                'Steamer'
+            )
+            AND cg.GroupName = 'Milk';
