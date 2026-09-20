@@ -324,6 +324,22 @@ VALUES
             3
         );
 
+    -- Ice
+        INSERT INTO CustomizationGroup (
+            GroupName,
+            SelectionType,
+            MinimumSelections,
+            MaximumSelections,
+            DisplayOrder
+        )
+        VALUES (
+            'Ice',
+            'Single',
+            0,
+            1,
+            4
+        );
+
 -- Customization Options
 
     -- Milk
@@ -374,24 +390,44 @@ VALUES
                 FROM CustomizationGroup
                 WHERE GroupName = 'Milk Addition'), 'Add Milk');
 
-        -- Temperature Options
-            INSERT INTO CustomizationOption (
-                CustomizationGroupID,
-                OptionName
-            )
-            VALUES
-                (
-                    (SELECT CustomizationGroupID
+    -- Temperature Options
+        INSERT INTO CustomizationOption (
+            CustomizationGroupID,
+            OptionName
+        )
+        VALUES
+            ((SELECT CustomizationGroupID
                     FROM CustomizationGroup
                     WHERE GroupName = 'Temperature'),
                     'Less Hot'
-                ),
-                (
-                    (SELECT CustomizationGroupID
-                    FROM CustomizationGroup
-                    WHERE GroupName = 'Temperature'),
-                    'Extra Hot'
-                );
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Temperature'),
+                'Extra Hot'
+            );
+
+    -- Ice Options
+        INSERT INTO CustomizationOption (
+            CustomizationGroupID,
+            OptionName
+        )
+        VALUES
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Ice'),
+                'No Ice'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Ice'),
+                'Light Ice'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Ice'),
+                'Extra Ice'
+            );
 
     -- Customization Dependencies
 
@@ -532,3 +568,28 @@ VALUES
             'Steamer'
         )
         AND cg.GroupName = 'Temperature';
+
+    -- Ice Customizations
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+        )
+        SELECT
+            p.ProductID,
+            co.CustomizationOptionID,
+            0.00
+        FROM Product p
+        CROSS JOIN CustomizationOption co
+        JOIN CustomizationGroup cg
+            ON co.CustomizationGroupID = cg.CustomizationGroupID
+        WHERE p.ProductName IN (
+            'Iced Latte',
+            'Iced Americano',
+            'Iced Mocha',
+            'Iced Tea',
+            'Iced Chai Latte',
+            'Italian Soda',
+            'Lemonade'
+        )
+        AND cg.GroupName = 'Ice';
