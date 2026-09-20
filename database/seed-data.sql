@@ -258,6 +258,7 @@ VALUES
             (SELECT SizeID FROM Size WHERE SizeName = '12 oz'), 0.50),
             ((SELECT ProductID FROM Product WHERE ProductName = 'Steamer'),
             (SELECT SizeID FROM Size WHERE SizeName = '16 oz'), 1.00);
+
     -- Cold Beverages
 
         -- Iced Chai Latte
@@ -307,8 +308,23 @@ VALUES
             2
         );
 
--- Customization Options
+    -- Temperature
+        INSERT INTO CustomizationGroup (
+            GroupName,
+            SelectionType,
+            MinimumSelections,
+            MaximumSelections,
+            DisplayOrder
+        )
+        VALUES (
+            'Temperature',
+            'Single',
+            0,
+            1,
+            3
+        );
 
+-- Customization Options
 
     -- Milk
         INSERT INTO CustomizationOption (
@@ -358,6 +374,25 @@ VALUES
                 FROM CustomizationGroup
                 WHERE GroupName = 'Milk Addition'), 'Add Milk');
 
+        -- Temperature Options
+            INSERT INTO CustomizationOption (
+                CustomizationGroupID,
+                OptionName
+            )
+            VALUES
+                (
+                    (SELECT CustomizationGroupID
+                    FROM CustomizationGroup
+                    WHERE GroupName = 'Temperature'),
+                    'Less Hot'
+                ),
+                (
+                    (SELECT CustomizationGroupID
+                    FROM CustomizationGroup
+                    WHERE GroupName = 'Temperature'),
+                    'Extra Hot'
+                );
+
     -- Customization Dependencies
 
         -- Milk Addition Dependencies
@@ -366,31 +401,31 @@ VALUES
             DependentGroupID
             )
             VALUES
-                    ((SELECT CustomizationOptionID
-                    FROM CustomizationOption
-                    WHERE OptionName = 'Splash'
-                    AND CustomizationGroupID = (
-                        SELECT CustomizationGroupID
-                        FROM CustomizationGroup
-                        WHERE GroupName = 'Milk Addition'
-                    )),
-                    (SELECT CustomizationGroupID
+                ((SELECT CustomizationOptionID
+                FROM CustomizationOption
+                WHERE OptionName = 'Splash'
+                AND CustomizationGroupID = (
+                    SELECT CustomizationGroupID
                     FROM CustomizationGroup
-                    WHERE GroupName = 'Milk')
-                    ),
-                    (
-                    (SELECT CustomizationOptionID
-                    FROM CustomizationOption
-                    WHERE OptionName = 'Add Milk'
-                    AND CustomizationGroupID = (
-                        SELECT CustomizationGroupID
-                        FROM CustomizationGroup
-                        WHERE GroupName = 'Milk Addition'
-                    )),
-                    (SELECT CustomizationGroupID
+                    WHERE GroupName = 'Milk Addition'
+                )),
+                (SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Milk')
+                ),
+                (
+                (SELECT CustomizationOptionID
+                FROM CustomizationOption
+                WHERE OptionName = 'Add Milk'
+                AND CustomizationGroupID = (
+                    SELECT CustomizationGroupID
                     FROM CustomizationGroup
-                    WHERE GroupName = 'Milk')
-                    );
+                    WHERE GroupName = 'Milk Addition'
+                )),
+                (SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Milk')
+                );
 
 -- Product Customizations
 
@@ -472,3 +507,28 @@ VALUES
             'Iced Tea'
         )
         AND cg.GroupName = 'Milk';
+
+    -- Temperature Customizations
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+        )
+        SELECT
+            p.ProductID,
+            co.CustomizationOptionID,
+            0.00
+        FROM Product p
+        CROSS JOIN CustomizationOption co
+        JOIN CustomizationGroup cg
+            ON co.CustomizationGroupID = cg.CustomizationGroupID
+        WHERE p.ProductName IN (
+            'Latte',
+            'Cappuccino',
+            'Americano',
+            'Mocha',
+            'Hot Chai Latte',
+            'Hot Chocolate',
+            'Steamer'
+        )
+        AND cg.GroupName = 'Temperature';
