@@ -436,11 +436,14 @@ This table will preserve the customer's selections at the time the order was pla
 | OrderItemCustomizationID | Unique identifier for the order item customization |
 | OrderItemID | Identifies the specific item being customized |
 | CustomizationOptionID | Identifies the customization option selected |
+| CustomizationQuantity | Optional quantity for the selected customization; NULL indicates the standard/default quantity |
 | PriceAdjustment | Price adjustment for the customization at the time of the order |
 
 Each Order Item Customization record will belong to one Order Item, while an Order Item can have multiple customization selections.
 
 Each customization selection will reference one Customization Option. The option's current availability or price will not be used to modify historical orders.
+
+The CustomizationQuantity field will allow a selected customization to include a specific quantity when needed. A NULL value will indicate that the standard or default quantity should be used. For example, a syrup flavor can use the standard recipe amount without specifying a quantity, while a modified or split syrup recipe can record the exact number of pumps for each flavor.
 
 The PriceAdjustment field will preserve the price adjustment associated with the customization when the order was created. This prevents future changes to customization pricing from altering historical order totals.
 

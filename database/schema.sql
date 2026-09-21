@@ -126,6 +126,7 @@ CREATE TABLE OrderItemCustomization (
     OrderItemCustomizationID INT PRIMARY KEY AUTO_INCREMENT,
     OrderItemID INT NOT NULL,
     CustomizationOptionID INT NOT NULL,
+    CustomizationQuantity INT NULL,
     PriceAdjustment DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (OrderItemID) REFERENCES OrderItem(OrderItemID),
     FOREIGN KEY (CustomizationOptionID) REFERENCES CustomizationOption(CustomizationOptionID)
