@@ -361,9 +361,25 @@ VALUES
             5
         );
 
+    -- Syrup
+        INSERT INTO CustomizationGroup (
+            GroupName,
+            SelectionType,
+            MinimumSelections,
+            MaximumSelections,
+            DisplayOrder
+        )
+        VALUES (
+            'Syrup',
+            'Multiple',
+            0,
+            8,
+            6
+        );
+
 -- Customization Options
 
-    -- Milk
+    -- Milk Options
         INSERT INTO CustomizationOption (
             CustomizationGroupID,
             OptionName
@@ -473,6 +489,53 @@ VALUES
                 FROM CustomizationGroup
                 WHERE GroupName = 'Foam'),
                 'Only Foam'
+            );
+
+    -- Syrup Options
+        INSERT INTO CustomizationOption (
+            CustomizationGroupID,
+            OptionName
+        )
+        VALUES
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Vanilla'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Sugar Free Vanilla'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Hazelnut'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Sugar Free Hazelnut'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Toffee Nut'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Lavender'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Strawberry'
+            ),
+            ((SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Syrup'),
+                'Raspberry'
             );
 
     -- Customization Dependencies
@@ -663,3 +726,35 @@ VALUES
             'Steamer'
         )
         AND cg.GroupName = 'Foam';
+
+    -- Syrup Customizations
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+        )
+        SELECT
+            p.ProductID,
+            co.CustomizationOptionID,
+            1.00
+        FROM Product p
+        CROSS JOIN CustomizationOption co
+        JOIN CustomizationGroup cg
+            ON co.CustomizationGroupID = cg.CustomizationGroupID
+        WHERE p.ProductName IN (
+            'Latte',
+            'Cappuccino',
+            'Americano',
+            'Mocha',
+            'Iced Latte',
+            'Iced Americano',
+            'Iced Mocha',
+            'Drip Coffee',
+            'Hot Tea',
+            'Iced Tea',
+            'Hot Chai Latte',
+            'Iced Chai Latte',
+            'Hot Chocolate',
+            'Steamer'
+        )
+        AND cg.GroupName = 'Syrup';
