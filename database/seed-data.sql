@@ -282,6 +282,7 @@ VALUES
 
 -- Customization Groups
 
+    -- Milk
     INSERT INTO CustomizationGroup (
         GroupName,
         SelectionType,
@@ -289,10 +290,14 @@ VALUES
         MaximumSelections,
         DisplayOrder
     )
-    VALUES
-        ('Milk', 'Single', 0, 1, 1);
-
-    -- Milk Addition
+    VALUES (
+        'Milk',
+        'Single',
+        0,
+        1,
+        1
+    );
+        -- Milk Addition
         INSERT INTO CustomizationGroup (
             GroupName,
             SelectionType,
@@ -338,6 +343,22 @@ VALUES
             0,
             1,
             4
+        );
+
+    -- Foam
+        INSERT INTO CustomizationGroup (
+            GroupName,
+            SelectionType,
+            MinimumSelections,
+            MaximumSelections,
+            DisplayOrder
+        )
+        VALUES (
+            'Foam',
+            'Single',
+            0,
+            1,
+            5
         );
 
 -- Customization Options
@@ -427,6 +448,31 @@ VALUES
                 FROM CustomizationGroup
                 WHERE GroupName = 'Ice'),
                 'Extra Ice'
+            );
+
+    -- Foam Options
+        INSERT INTO CustomizationOption (
+            CustomizationGroupID,
+            OptionName
+        )
+        VALUES
+            (
+                (SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Foam'),
+                'No Foam'
+            ),
+            (
+                (SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Foam'),
+                'Extra Foam'
+            ),
+            (
+                (SELECT CustomizationGroupID
+                FROM CustomizationGroup
+                WHERE GroupName = 'Foam'),
+                'Only Foam'
             );
 
     -- Customization Dependencies
@@ -593,3 +639,27 @@ VALUES
             'Lemonade'
         )
         AND cg.GroupName = 'Ice';
+
+    -- Foam Customizations
+        INSERT INTO ProductCustomization (
+            ProductID,
+            CustomizationOptionID,
+            PriceAdjustment
+        )
+        SELECT
+            p.ProductID,
+            co.CustomizationOptionID,
+            0.00
+        FROM Product p
+        CROSS JOIN CustomizationOption co
+        JOIN CustomizationGroup cg
+            ON co.CustomizationGroupID = cg.CustomizationGroupID
+        WHERE p.ProductName IN (
+            'Latte',
+            'Cappuccino',
+            'Mocha',
+            'Hot Chai Latte',
+            'Hot Chocolate',
+            'Steamer'
+        )
+        AND cg.GroupName = 'Foam';
